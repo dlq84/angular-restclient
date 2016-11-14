@@ -26,10 +26,6 @@ function Endpoint(endpointConfig, $injector) {
         get: {
             method: 'GET',
             transformResponse: function(data, headers, status) {
-                if (status >= 500) return false;
-                data = angular.fromJson(data);
-                if (status >= 400) return data;
-
                 return {
                     result: self._mapResult(angular.fromJson(data)),
                     pagination: self._getPagination(data)
@@ -98,6 +94,8 @@ Endpoint.prototype.get = function (params) {
     var defer = self._q.defer();
 
     this._resource.get(params, function(data) {
+        console.log('data');
+        console.log(data);
         data.result.pagination = data.pagination;
         data.result.endpoint = self;
         data.result.next = function() {
